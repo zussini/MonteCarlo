@@ -5,6 +5,8 @@
 #include <time.h>
 #include <iomanip>
 
+
+
 /*class wspolrzedna
 {
 public:
@@ -25,12 +27,12 @@ public:
 class punkt
 {
 public:
-  int wsp_x;
-  int wsp_y;
+  long wsp_x;
+  long wsp_y;
 
   punkt();
   
-  punkt(int x,int y)
+  punkt(long x,long y)
   {
     wsp_x = x;
     wsp_y = y;
@@ -73,41 +75,38 @@ public:
 
 int main()
 {
-  long double epsilon_in = 0.000001;
-  long double epsilon_var;
+  long double epsilon_in = 0.00000000001;
+  long double epsilon_var = epsilon_in;
+  long double abs_epsilon_var = 0.01;
   long double pi_exact = 3.14159265358979;
   long double pi_approx;
-  //double bok = double(RAND_MAX); // bok jest potega liczby 10;
- //  double r_kola = double(RAND_MAX);
-  double bok = 9999.0; // bok jest potega liczby 10;
-  double r_kola = 9999.0;
-  std::cout << bok << std::endl << r_kola;
+  const int period = log((RAND_MAX)/log(2)); // here we define the  period of rand() function as the power of 2
+  double bok = 9999.0; // here we define  square size
+  double r_kola = 9999.0; // here we define radius of circle
   long x = 1;
   long y =1 ;
-  long iter = 1000000000;
   int cnt_kwd = 0;
   int cnt_kol= 0;
-  int cnt_srand = 1;
+  int cnt = 0;
   int cnt_poza = 0;
-  double por;
-  //  punkt *p = new punkt(x,y);
   srand(time(NULL));
-  for (long i = 0;i<iter;i++)
+
+  //main loop --------------------------------------------
+
+  while(std::abs(epsilon_var)>=epsilon_in)
     {
-      
-      //      cnt_kwd++;
-      /*  if(cnt_kwd=2^31)
+      cnt++;
+      if(cnt==pow(2,period))
 	  {
-	  cnt_srand++;
-	  srand(cnt_srand);
-	  }*/// w razie przekroczenia okresu funkcji (2^32 liczb) rand (kiedy pobierzemy 2^32 liczbe losowa w kolejnosci od poczatku) należy uzyc innego seeda tutaj poprzez zwiekszenie  o 1 2147483647
+	  srand(time(NULL));
+	  cnt = 0;
+	  }/// we use this condition in case that number of iterations exceeds the period of rand() function, which is defined by RAND_MAX (each number appears only once)
       x = rand()%10000;
       y = rand()%10000;
-      //     std::cout << x << std::endl <<y<<std::endl;
-      //            punkt *p = new punkt(x,y);
-      //      p->ustaw(x,y);
+      //punkt *p;
+      //p->ustaw(x,y);
+      //            std::cout << p->wsp_x << "\t"<<p->wsp_y;break;
       //      p->wsp_y = y;
-      //std::cout << p->wsp_x << std::endl <<p->wsp_y<<std::endl;
       //      if(p->punkt_w_kole(r_kola))
       if((long double)x<=bok&&(long double)y<=bok)
 	{
@@ -122,18 +121,17 @@ int main()
 	{
 	  cnt_poza++;
 	}
+
       pi_approx = (4.0*(long double)cnt_kol/(long double)cnt_kwd);
       epsilon_var = pi_exact-pi_approx;
-      //      if((pi_exact-epsilon_in)<=pi_approx&&pi_approx<=(pi_exact+epsilon_in))	
-	if(std::abs(epsilon_var)<=epsilon_in)
-	{
-	  break;
-	}
-      if(cnt_kol%10000000==0){std::cout << cnt_kol << "  " << cnt_kwd << "  "<< " "<< cnt_poza << " "<<  pi_approx << std::endl; }
+      abs_epsilon_var = std::abs(epsilon_var)<=epsilon_in;
+      if(cnt_kol%10000000==0)
+	{std::cout << " number of points in circle: "<<cnt_kol << " square : " << cnt_kwd << " current Pi value: \t"<<  pi_approx << "current absolute error:\t"<< abs_epsilon_var << std::endl; // this condition shows current calculated value of pi, epsilon_var, and number of points in circle and square
+	} 
     }
   
     std::cout << cnt_kwd << std::endl << cnt_kol << std::endl;
-    std::cout << "Pi wynosi "  << std::setprecision(15)<< pi_approx << " "<< RAND_MAX << epsilon_var << "\t"<< std::abs(-10.1532123) <<std::endl;
+    std::cout << "Pi wynosi "  << std::setprecision(15)<< pi_approx << " "<< cnt_kwd << "\t"<< std::abs(epsilon_var) <<std::endl;
  
   return 0;
 
