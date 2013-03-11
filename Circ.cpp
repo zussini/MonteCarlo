@@ -73,7 +73,10 @@ public:
 
 int main()
 {
-   double pi = 3.1415926535897932384626;
+  long double epsilon_in = 0.000001;
+  long double epsilon_var;
+  long double pi_exact = 3.14159265358979;
+  long double pi_approx;
   //double bok = double(RAND_MAX); // bok jest potega liczby 10;
  //  double r_kola = double(RAND_MAX);
   double bok = 9999.0; // bok jest potega liczby 10;
@@ -81,6 +84,7 @@ int main()
   std::cout << bok << std::endl << r_kola;
   long x = 1;
   long y =1 ;
+  long iter = 1000000000;
   int cnt_kwd = 0;
   int cnt_kol= 0;
   int cnt_srand = 1;
@@ -88,7 +92,7 @@ int main()
   double por;
   //  punkt *p = new punkt(x,y);
   srand(time(NULL));
-  for (long i = 0;i<10000000000000;i++)
+  for (long i = 0;i<iter;i++)
     {
       
       //      cnt_kwd++;
@@ -118,28 +122,18 @@ int main()
 	{
 	  cnt_poza++;
 	}
-      if((pi-0.00000000001)<=(4.0*(long double)cnt_kol/(long double)cnt_kwd)&&(4.0*(long double)cnt_kol/(long double)cnt_kwd)<=(pi+0.00000000001))
+      pi_approx = (4.0*(long double)cnt_kol/(long double)cnt_kwd);
+      epsilon_var = pi_exact-pi_approx;
+      //      if((pi_exact-epsilon_in)<=pi_approx&&pi_approx<=(pi_exact+epsilon_in))	
+	if(std::abs(epsilon_var)<=epsilon_in)
 	{
 	  break;
 	}
-      if(cnt_kol%10000000==0){std::cout << cnt_kol << "  " << cnt_kwd << "  "<< " "<< cnt_poza << " "<< (4.0*(long double)cnt_kol/(long double)cnt_kwd) << std::endl; }
+      if(cnt_kol%10000000==0){std::cout << cnt_kol << "  " << cnt_kwd << "  "<< " "<< cnt_poza << " "<<  pi_approx << std::endl; }
     }
   
-  
-  
     std::cout << cnt_kwd << std::endl << cnt_kol << std::endl;
-    std::cout << "Pi wynosi "  << std::setprecision(15)<< (long double)(4.0*cnt_kol/cnt_kwd) << " "<< RAND_MAX<<std::endl;
-
-    
-    //    std::cout << double(4*cnt_kol/(cnt_kwd))<<std::endl;
-    //      punkt *p = new punkt(10,10);
-    //  std::cout << p->wsp_x << std::endl <<p->wsp_y<<std::endl
-  //std::cout << time(NULL) << std::endl;
-  //srand(1);
-  //std::cout << rand()<< std::endl;
-  //  srand(2);
-  //std::cout << rand()<< std::endl;
- 
+    std::cout << "Pi wynosi "  << std::setprecision(15)<< pi_approx << " "<< RAND_MAX << epsilon_var << "\t"<< std::abs(-10.1532123) <<std::endl;
  
   return 0;
 
