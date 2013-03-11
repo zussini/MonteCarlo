@@ -1,0 +1,6 @@
+The code is written in C++, using Linux/Ubuntu 10.04 enviroment and gcc, std libraries. 
+To build under Windows use Mingw development enviroment.
+
+Command line to build the code under linux:
+g++ Circ.cpp -o Circ
+
